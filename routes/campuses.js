@@ -30,11 +30,20 @@ router.get('/', ash(async(req, res) => {
   res.status(200).json(campuses);  // Status code 200 OK - request succeeded
 }));
 
-/* GET CAMPUS BY ID */
+/* GET CAMPUS BY ID, including students*/
 router.get('/:id', ash(async(req, res) => {
   // Find campus by Primary Key
-  let campus = await Campus.findByPk(req.params.id, {include: [Student]});  // Get the campus and its associated students
-  res.status(200).json(campus);  // Status code 200 OK - request succeeded
+  const campus = await Campus.findByPk(req.params.id, {
+    include: [Student]
+  });  // Get the campus and its associated students
+
+  if (!campus) {
+    res.status(404).json({ error: 'Campus not found' });
+  }
+  else {
+    res.status(200).json(campus);
+  }
+
 }));
 
 /* DELETE CAMPUS */
