@@ -19,7 +19,16 @@ const Campus = db.define("campus", {
   },
 
   description: {
+    type: Sequelize.TEXT, //allow for large text field
+    allowNull: true
+  },
+
+  // completed campus model with missing information
+
+  imageUrl: {
     type: Sequelize.STRING,
+    defaultValue: 'https://i.ebayimg.com/images/g/F94AAOSw5lRnB~Aa/s-l1600.jpg',
+    allowNull: true
   }
 });
 
