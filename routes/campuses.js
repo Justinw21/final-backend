@@ -12,6 +12,8 @@ const { Student, Campus } = require('../database/models');
 
 // Import a middleware to replace "try and catch" for request handler, for a concise coding (fewer lines of code)
 const ash = require('express-async-handler');
+const { Op } = require('sequelize');
+
 
 /* GET ALL CAMPUSES: async/await using "try-catch" */
 // router.get('/', async (req, res, next) => {
@@ -23,6 +25,7 @@ const ash = require('express-async-handler');
 //     next(err);
 //   }
 // });
+
 
 /* GET ALL CAMPUSES */
 router.get('/', ash(async(req, res) => {
@@ -46,6 +49,13 @@ router.get('/:id', ash(async(req, res) => {
 
 }));
 
+/* ADD NEW CAMPUS */
+router.post('/', ash(async(req, res, next) => {
+  Campus.create(req.body)
+  .then(createdCampus => res.status(200).json(createdCampus))
+  .catch(err => next(err))
+}));
+
 /* DELETE CAMPUS */
 router.delete('/:id', ash(async(req, res) => {
   await Campus.destroy({
@@ -54,12 +64,6 @@ router.delete('/:id', ash(async(req, res) => {
     }
   });
   res.status(200).json("Deleted a campus!");
-}));
-
-/* ADD NEW CAMPUS */
-router.post('/', ash(async(req, res) => {
-  let newCampus = await Campus.create(req.body);
-  res.status(200).json(newCampus);  // Status code 200 OK - request succeeded
 }));
 
 /* EDIT CAMPUS */
